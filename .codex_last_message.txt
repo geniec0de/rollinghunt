@@ -1,0 +1,4 @@
+- files_changed=[tailwind.config.ts,app/globals.css,components/ui/button.tsx,components/ui/card.tsx,components/dashboard/today-list.tsx,app/(app)/dashboard/page.tsx,references/screenshots/rollingdiceclub/current_ui.png,.codex_last_message.txt]
+- screenshot_saved=references/screenshots/rollingdiceclub/current_ui.png
+- missing_refs=[.media/browser/1f893d82-9d12-48dd-9248-ea4fbd7f8c6a.png]
+- next_steps=REVIEW_UI
