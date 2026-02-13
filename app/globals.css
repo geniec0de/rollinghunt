@@ -4,10 +4,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@700&display=swap");
 
 :root {
-  --surface: #ffffff;
-  --ink: rgb(2, 8, 23);
+  --surface: #e2e8f0;
+  --paper: #ffffff;
+  --ink: #02080f;
   --muted: #e2e8f0;
   --accent: #420000;
+  --hard-shadow: 8px 8px 0 #000;
 }
 
 * {
@@ -20,8 +22,8 @@ body {
   background:
     radial-gradient(circle at 20% 0%, #f3f4f6 0%, transparent 30%),
     linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  color: rgb(15 23 42);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   font-size: 16px;
   line-height: 24px;
 }
@@ -50,8 +52,9 @@ h2 {
 
 .card {
   border: 1px solid var(--muted);
-  border-radius: 0.5rem;
-  background: #e2e8f0;
+  border-radius: 0;
+  background: var(--paper);
+  box-shadow: var(--hard-shadow);
 }
 
 .cta {
@@ -59,11 +62,12 @@ h2 {
   border-radius: 0;
   background: #000;
   color: #fff;
-  padding: 0.625rem 1rem;
+  padding: 0 0.75rem;
+  min-height: 1.75rem;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
-  box-shadow: 8px 8px 0 0 #000;
+  box-shadow: var(--hard-shadow);
 }
 
 .cta:disabled {

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 
@@ -33,20 +33,22 @@ export async function TodayList() {
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {launches.map((launch) => (
         <li key={launch.id}>
-          <Card className="p-4">
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-              <div className="min-w-0">
-                <h3 className="truncate font-heading text-xl font-bold text-primary">{launch.projects?.[0]?.name ?? "Untitled project"}</h3>
-                <p className="mt-1 text-sm text-slate-700">{launch.projects?.[0]?.tagline ?? "No tagline available."}</p>
+          <Card className="p-5">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0 md:pr-8">
+                <h3 className="truncate font-heading text-3xl font-bold leading-tight text-primary">
+                  {launch.projects?.[0]?.name ?? "Untitled project"}
+                </h3>
+                <p className="mt-2 text-base leading-6 text-slate-700">{launch.projects?.[0]?.tagline ?? "No tagline available."}</p>
               </div>
               <div className="shrink-0 text-left text-sm md:text-right">
-                <p className="font-semibold text-primary">{launch.launch_date}</p>
+                <p className="font-semibold text-primary">{format(parseISO(launch.launch_date), "MMM d, yyyy")}</p>
                 <p className="text-slate-700">{launch.timezone}</p>
                 <a
-                  className="mt-2 inline-block text-sm font-semibold underline underline-offset-2"
+                  className="mt-3 inline-block text-sm font-semibold underline underline-offset-2"
                   href={launch.projects?.[0]?.product_hunt_url ?? "#"}
                   rel="noreferrer"
                   target="_blank"

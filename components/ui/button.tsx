@@ -9,11 +9,11 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center text-xs font-semibold tracking-[0.02em] transition-opacity disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center text-xs tracking-[0.02em] transition-opacity disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants: Record<ButtonVariant, string> = {
-  default: "rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900",
-  cta: "rounded-none border-0 bg-black px-3 py-2 text-white shadow-hard",
+  default: "rounded-none border border-border bg-paper px-3 py-2 font-semibold text-primary",
+  cta: "rounded-none border-0 bg-neutral px-3 py-0 text-white min-h-7 font-medium shadow-hard",
 };
 
 export function Button({ className = "", href, variant = "default", type = "button", ...props }: ButtonProps) {
