@@ -1,16 +1,20 @@
-Completed.
-
-- Applied focused UI updates to token mapping and dashboard presentation in:
-  - `tailwind.config.ts`
-  - `app/globals.css`
-  - `components/ui/button.tsx`
-  - `components/ui/card.tsx`
-  - `components/dashboard/today-list.tsx`
-  - `app/(app)/dashboard/page.tsx`
-- Referenced screenshot at `references/screenshots/rollingdiceclub/current_ui.png`.
-- Wrote required JSON report to `.codex_last_message.txt`.
-- Created commit: `74bfed6` with message `feat(ui): polish dashboard cards + theme tokens`.
-
-Validation:
-- `pnpm lint` could not run because Next.js ESLint setup is interactive in this repo.
-- `pnpm exec tsc --noEmit` reports pre-existing TypeScript errors outside edited UI files.
+{
+  "files_changed": [
+    "app/(app)/dashboard/page.tsx",
+    "app/globals.css",
+    "components/dashboard/today-list.tsx",
+    "components/calendar/MonthCalendar.tsx",
+    "components/calendar/DayPanel.tsx"
+  ],
+  "screenshot_used": "references/screenshots/rollingdiceclub/current_ui.png",
+  "notes": [
+    "Added client-side List/Calendar toggle with default List state and no backend changes.",
+    "Implemented lightweight date-fns month grid and side day-details panel.",
+    "Applied style-token aligned calendar utilities and reused existing hard-shadow visual language.",
+    "components/ui/card.tsx already supported a small variant in HEAD; no net diff required."
+  ],
+  "next_steps": [
+    "Add keyboard focus trap for the day side panel if modal-level accessibility is required.",
+    "Optional: add month/year jump control for faster navigation."
+  ]
+}

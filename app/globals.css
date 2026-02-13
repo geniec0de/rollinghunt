@@ -10,6 +10,9 @@
   --muted: #e2e8f0;
   --accent: #420000;
   --hard-shadow: 8px 8px 0 #000;
+  --calendar-weekday: #475569;
+  --calendar-gap: 0.5rem;
+  --mini-shadow: 3px 3px 0 #000;
 }
 
 * {
@@ -55,6 +58,24 @@ h2 {
   border-radius: 0;
   background: var(--paper);
   box-shadow: var(--hard-shadow);
+}
+
+.card-small {
+  box-shadow: var(--mini-shadow);
+}
+
+.calendar-weekday {
+  font-family: "Oxanium", sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--calendar-weekday);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--calendar-gap);
 }
 
 .cta {
