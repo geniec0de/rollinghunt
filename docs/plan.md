@@ -82,3 +82,6 @@
 - Which canonical timezone should define launch-day capacity checks (UTC or a club timezone)?
 - Should per-day capacity be fixed (2) or configurable via env/DB in v1?
 - Should a member be allowed to edit/reschedule a booked launch date after creation?
+
+## Blockers
+- `pnpm install` failed on February 13, 2026 because the environment cannot access `https://registry.npmjs.org` (`EACCES` / `ERR_PNPM_META_FETCH_FAIL`), so dependencies could not be installed and runtime validation (`pnpm dev` / `pnpm build`) could not be executed.

@@ -1,8 +1,17 @@
 import type { HTMLAttributes } from "react";
 
-type CardProps = HTMLAttributes<HTMLDivElement>;
+type CardVariant = "default" | "small";
 
-export function Card({ className = "", ...props }: CardProps) {
-  const mergedClassName = `card border border-border bg-paper ${className}`.trim();
+type CardProps = HTMLAttributes<HTMLDivElement> & {
+  variant?: CardVariant;
+};
+
+const variants: Record<CardVariant, string> = {
+  default: "card border border-border bg-paper",
+  small: "card card-small border border-border bg-paper",
+};
+
+export function Card({ className = "", variant = "default", ...props }: CardProps) {
+  const mergedClassName = `${variants[variant]} ${className}`.trim();
   return <div className={mergedClassName} {...props} />;
 }

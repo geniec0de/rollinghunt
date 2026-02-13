@@ -1,0 +1,28 @@
+You are Codex. Context: rollinghunt repo at C:/Users/Administrator/.openclaw/workspace/projects/rollingdiceclub/rollinghunt.
+
+Assets (must read):
+- style tokens: references/raw/rollingdiceclub-extracted/style-tokens.json
+- live screenshot: references/screenshots/rollingdiceclub/current_ui.png
+
+Task (strict UI-only):
+Focus on design and add a calendar view for launches with a list/calendar toggle. Requirements:
+1) Create a calendar component (components/calendar/MonthCalendar.tsx) that displays launches by date in monthly grid, with each day showing 0..N small launch cards (title and owner). Clicking a day opens a side panel with day details.
+2) Add a List/Calendar toggle in the dashboard header; default view is List. Persist choice in local state (no backend changes).
+3) Style calendar and list to be premium/enterprise-grade, referencing the style tokens: Oxanium headings, primary color #02080F, card surface #FFFFFF with hard shadow, consistent spacing.
+4) Keep code minimal and self-contained. Use no heavy third-party calendar libs; implement a lightweight Month grid component with date-fns for date handling.
+5) Files to create/modify (only):
+   - components/calendar/MonthCalendar.tsx
+   - components/calendar/DayPanel.tsx
+   - components/dashboard/today-list.tsx (modify to support toggle)
+   - app/(app)/dashboard/page.tsx (use toggle and calendar)
+   - components/ui/card.tsx (ensure supports small variant)
+6) Update app/globals.css or tailwind config for calendar-specific tokens (weekday headings, grid gap).
+7) Commit locally in a single commit with message: feat(ui): add calendar view + list toggle
+8) Write concise JSON report to .codex_last_message.txt with fields: files_changed, screenshot_used, notes, next_steps
+
+Constraints:
+- DO NOT change backend or migrations.
+- Do NOT push.
+- If any required data is missing, stop and report missing values in the report.
+
+Run and apply changes now.
