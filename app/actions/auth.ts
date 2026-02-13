@@ -92,8 +92,8 @@ export async function signUpWithInvite(
     return { error: "Invite code is invalid, expired, or out of uses." };
   }
 
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  revalidatePath("/sign-in");
+  redirect("/sign-in?success=Account created. Please sign in.");
 }
 
 export async function signIn(
@@ -124,4 +124,44 @@ export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/sign-in");
+}
+
+const updateDisplayNameSchema = z.object({
+  displayName: z.string().trim().min(2).max(80),
+});
+
+export async function updateProfileDisplayName(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const parsed = updateDisplayNameSchema.safeParse({
+    displayName: formData.get("displayName"),
+  });
+
+  if (!parsed.success) {
+    return { error: "Display name must be 2–80 characters." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be signed in." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ display_name: parsed.data.displayName })
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/profile");
+  revalidatePath("/dashboard");
+  revalidatePath("/my-launches");
+  return { success: "Display name updated. It will show as the owner name on your launches." };
 }

@@ -4,7 +4,8 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { signIn } from "@/app/actions/auth";
 
-const initialState = {};
+type AuthState = { error?: string };
+const initialState: AuthState = {};
 
 function SubmitButton() {
   const { pending } = useFormStatus();

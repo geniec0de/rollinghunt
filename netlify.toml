@@ -1,0 +1,9 @@
+# rollinghunt – Next.js on Netlify
+# https://docs.netlify.com/frameworks/next-js/
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

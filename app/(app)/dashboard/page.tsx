@@ -2,6 +2,10 @@ import { format } from "date-fns";
 import { TodayList, type DashboardLaunch } from "@/components/dashboard/today-list";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { getDailyLaunchCap } from "@/lib/launch-rules";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Dashboard" };
 
 type LaunchRow = {
   id: string;
@@ -12,11 +16,15 @@ type LaunchRow = {
       name: string;
       tagline: string;
       product_hunt_url: string;
+      ask_from_founder: string | null;
+      short_explanation: string | null;
     }
     | Array<{
       name: string;
       tagline: string;
       product_hunt_url: string;
+      ask_from_founder: string | null;
+      short_explanation: string | null;
     }>
     | null;
   owner:
@@ -44,7 +52,7 @@ export default async function DashboardPage() {
 
   const { data, error } = await supabase
     .from("launches")
-    .select("id, launch_date, timezone, projects(name, tagline, product_hunt_url), owner:profiles!launches_created_by_fkey(display_name)")
+    .select("id, launch_date, timezone, projects(name, tagline, product_hunt_url, ask_from_founder, short_explanation), owner:profiles!launches_created_by_fkey(display_name)")
     .gte("launch_date", format(new Date(), "yyyy-MM-dd"))
     .order("launch_date", { ascending: true });
 
@@ -63,8 +71,11 @@ export default async function DashboardPage() {
       tagline: project?.tagline ?? "No tagline available.",
       owner: owner?.display_name ?? "Member",
       productHuntUrl: project?.product_hunt_url ?? "#",
+      askFromFounder: project?.ask_from_founder ?? null,
+      shortExplanation: project?.short_explanation ?? null,
     };
   });
+  const dailyCap = getDailyLaunchCap();
   return (
     <section className="space-y-10">
       <div className="space-y-4">
@@ -74,7 +85,7 @@ export default async function DashboardPage() {
           <Button href="/projects/new" variant="cta">Book launch</Button>
         </div>
       </div>
-      <TodayList launches={launches} />
+      <TodayList dailyCap={dailyCap} launches={launches} />
     </section>
   );
 }

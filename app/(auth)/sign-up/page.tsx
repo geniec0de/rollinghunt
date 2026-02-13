@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { SignUpForm } from "@/components/auth/sign-up-form";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Sign up" };
 
 export default function SignUpPage() {
   return (
@@ -11,7 +14,7 @@ export default function SignUpPage() {
           <SignUpForm />
         </div>
         <p className="mt-6 text-sm text-slate-600">
-          Already a member? <Link className="underline" href="/sign-in">Sign in</Link>
+          Already a member? <Link className="font-medium text-accent underline underline-offset-2 hover:text-red-800" href="/sign-in">Sign in</Link>
         </p>
       </section>
     </main>
