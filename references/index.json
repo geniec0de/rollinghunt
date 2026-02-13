@@ -1,0 +1,13 @@
+[
+  {
+    "url": "https://www.rollingdiceclub.com/",
+    "fetchedAt": "2026-02-13",
+    "tags": ["branding", "copy", "positioning", "design"],
+    "files": [
+      "references/markdown/rollingdiceclub-site-copy.md",
+      "references/raw/rollingdiceclub-extracted/style-tokens.json",
+      "references/raw/rollingdiceclub-extracted/page-head.html",
+      "references/screenshots/rollingdiceclub/rollingdice-full-landing-page.png"
+    ]
+  }
+]
