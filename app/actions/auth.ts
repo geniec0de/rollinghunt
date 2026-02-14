@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { createServerActionClient } from "@/lib/supabase/server";
 
 type AuthActionState = {
   error?: string;
@@ -45,7 +45,7 @@ export async function signUpWithInvite(
     return { error: "Please provide valid sign-up details." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createServerActionClient();
   const { email, password, displayName, inviteCode } = parsed.data;
   const normalizedInviteCode = normalizeInviteCode(inviteCode);
 
@@ -109,7 +109,7 @@ export async function signIn(
     return { error: "Please provide a valid email and password." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createServerActionClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
 
   if (error) {
@@ -121,7 +121,7 @@ export async function signIn(
 }
 
 export async function signOut() {
-  const supabase = await createClient();
+  const supabase = await createServerActionClient();
   await supabase.auth.signOut();
   redirect("/sign-in");
 }
@@ -142,7 +142,7 @@ export async function updateProfileDisplayName(
     return { error: "Display name must be 2–80 characters." };
   }
 
-  const supabase = await createClient();
+  const supabase = await createServerActionClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
