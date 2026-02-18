@@ -1,9 +1,9 @@
-import { format, parseISO } from "date-fns";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IconExternalLink } from "@/components/ui/icon-external-link";
+import { formatLaunchTimeInViewerTz } from "@/lib/launch-time";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "My launches" };
@@ -17,10 +17,24 @@ type ProjectShape = {
   short_explanation: string | null;
 };
 
+const STATUS_LABELS: Record<string, string> = {
+  in_review: "In review",
+  need_editing: "Need editing",
+  passed: "Passed",
+};
+
+const STATUS_STYLES: Record<string, string> = {
+  in_review: "bg-amber-100 text-amber-800 border-amber-200",
+  need_editing: "bg-orange-100 text-orange-800 border-orange-200",
+  passed: "bg-emerald-100 text-emerald-800 border-emerald-200",
+};
+
 type LaunchRow = {
   id: string;
   launch_date: string;
   timezone: string;
+  status: string;
+  admin_comment: string | null;
   projects: ProjectShape | ProjectShape[] | null;
 };
 
@@ -39,9 +53,16 @@ export default async function MyLaunchesPage() {
     redirect("/sign-in");
   }
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("timezone")
+    .eq("id", user.id)
+    .single();
+  const viewerTimezone = profile?.timezone ?? null;
+
   const { data, error } = await supabase
     .from("launches")
-    .select("id, launch_date, timezone, projects(id, name, tagline, product_hunt_url, ask_from_founder, short_explanation)")
+    .select("id, launch_date, timezone, status, admin_comment, projects(id, name, tagline, product_hunt_url, ask_from_founder, short_explanation)")
     .eq("created_by", user.id)
     .order("launch_date", { ascending: true });
 
@@ -80,10 +101,21 @@ export default async function MyLaunchesPage() {
                       {project?.short_explanation ? (
                         <p className="mt-1 text-xs text-slate-600">{project.short_explanation}</p>
                       ) : null}
+                      {launch.status !== "passed" ? (
+                        <p className="mt-2">
+                          <span className={`inline-block rounded-full border px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[launch.status] ?? "bg-slate-100 text-slate-700 border-slate-200"}`}>
+                            {STATUS_LABELS[launch.status] ?? launch.status}
+                          </span>
+                        </p>
+                      ) : null}
+                      {launch.admin_comment ? (
+                        <p className="mt-1 text-sm text-amber-800">
+                          <span className="font-semibold">Admin:</span> {launch.admin_comment}
+                        </p>
+                      ) : null}
                     </div>
                     <div className="flex shrink-0 flex-col items-start gap-2 text-left text-sm md:items-end md:text-right">
-                      <p className="font-semibold text-primary">{format(parseISO(launch.launch_date), "MMM d, yyyy")}</p>
-                      <p className="text-slate-700">{launch.timezone}</p>
+                      <p className="font-semibold text-primary">{formatLaunchTimeInViewerTz(launch.launch_date, viewerTimezone)}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         {projectId ? (
                           <Button href={`/projects/${projectId}/edit`} variant="cta-secondary">

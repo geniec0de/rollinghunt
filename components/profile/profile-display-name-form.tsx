@@ -11,7 +11,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <button className="cta mt-2" disabled={pending} type="submit">
-      {pending ? "Saving..." : "Update display name"}
+      {pending ? "Saving…" : "Update display name"}
     </button>
   );
 }
@@ -40,7 +40,12 @@ export function ProfileDisplayNameForm({ currentDisplayName }: ProfileDisplayNam
         placeholder="e.g. Jane Doe"
       />
       {state?.error ? <p className="mt-2 text-sm text-red-700">{state.error}</p> : null}
-      {state?.success ? <p className="mt-2 text-sm text-green-700">{state.success}</p> : null}
+      {state?.success ? (
+        <p className="mt-2 flex items-center gap-2 text-sm text-emerald-700">
+          <span className="size-2 rounded-full bg-emerald-500" aria-hidden />
+          {state.success}
+        </p>
+      ) : null}
       <SubmitButton />
     </form>
   );

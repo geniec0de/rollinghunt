@@ -18,6 +18,8 @@ export type CalendarLaunch = {
   id: string;
   launchDate: string;
   timezone: string;
+  /** Launch time in viewer's TZ (12:01 AM PST on launch date). */
+  displayTime?: string;
   title: string;
   tagline: string;
   owner: string;
@@ -27,16 +29,23 @@ export type CalendarLaunch = {
 type DayPanelProps = {
   date: Date;
   launches: CalendarLaunch[];
+  today?: string;
   onClose: () => void;
 };
 
-export function DayPanel({ date, launches, onClose }: DayPanelProps) {
+export function DayPanel({ date, launches, today: todayStr, onClose }: DayPanelProps) {
+  const isToday = todayStr != null && format(date, "yyyy-MM-dd") === todayStr;
   return (
     <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-md overflow-y-auto border-l border-border bg-paper p-5 shadow-hard md:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Day details</p>
-          <h3 className="mt-1 font-heading text-2xl font-bold text-primary">{format(date, "EEEE, MMM d")}</h3>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <h3 className="font-heading text-2xl font-bold text-primary">{format(date, "EEEE, MMM d")}</h3>
+            {isToday ? (
+              <span className="rounded-full bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">Today</span>
+            ) : null}
+          </div>
         </div>
         <Button variant="cta-secondary" className="h-8 px-3" onClick={onClose} type="button">
           Close
@@ -61,7 +70,7 @@ export function DayPanel({ date, launches, onClose }: DayPanelProps) {
               <h4 className="font-heading text-xl font-bold text-primary">{launch.title}</h4>
               <p className="mt-1 text-sm text-slate-700">{launch.tagline}</p>
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-600">Owner: {launch.owner}</p>
-              <p className="mt-1 text-xs text-slate-600">{launch.timezone}</p>
+              <p className="mt-1 text-xs text-slate-600">{launch.displayTime ?? launch.timezone}</p>
               <a
                 className="mt-3 inline-flex items-center justify-center rounded-none border border-accent/30 bg-paper p-2 text-accent transition-all duration-200 hover:border-accent hover:bg-red-50 hover:text-red-800 hover:shadow-[4px_4px_0_#420000]"
                 href={launch.productHuntUrl}

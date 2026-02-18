@@ -31,6 +31,8 @@ type MonthCalendarProps = {
   launches: CalendarLaunch[];
   /** Max launches per day; used to show "Full" and style full days. */
   dailyCap?: number;
+  /** Current day yyyy-MM-dd for "Today" label on the cell. */
+  today?: string;
 };
 
 function buildDayMap(launches: CalendarLaunch[]) {
@@ -43,7 +45,7 @@ function buildDayMap(launches: CalendarLaunch[]) {
   }, {});
 }
 
-export function MonthCalendar({ launches, dailyCap = 2 }: MonthCalendarProps) {
+export function MonthCalendar({ launches, dailyCap = 2, today: todayStr }: MonthCalendarProps) {
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -89,7 +91,7 @@ export function MonthCalendar({ launches, dailyCap = 2 }: MonthCalendarProps) {
             const dayKey = format(day, "yyyy-MM-dd");
             const launchesForDay = launchesByDay[dayKey] ?? [];
             const isCurrentMonth = isSameMonth(day, month);
-            const isToday = isSameDay(day, new Date());
+            const isToday = todayStr ? dayKey === todayStr : isSameDay(day, new Date());
             const bookable = isDateBookable(day);
             const full = bookable && launchesForDay.length >= dailyCap;
             const available = bookable && launchesForDay.length < dailyCap;
@@ -113,6 +115,9 @@ export function MonthCalendar({ launches, dailyCap = 2 }: MonthCalendarProps) {
                 >
                   <div className="mb-1.5 flex items-center justify-between gap-1">
                     <span className={`text-sm font-semibold ${isToday ? "text-cta-red" : "text-primary"}`}>{format(day, "d")}</span>
+                    {isToday ? (
+                      <span className="shrink-0 rounded-full bg-[var(--color-accent)]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--color-accent)]">Today</span>
+                    ) : null}
                     {full ? (
                       <span className="shrink-0 rounded-none bg-slate-400 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
                         Full
@@ -148,7 +153,7 @@ export function MonthCalendar({ launches, dailyCap = 2 }: MonthCalendarProps) {
         </div>
       </div>
 
-      {selectedDate && <DayPanel date={selectedDate} launches={dayLaunches} onClose={() => setSelectedDate(null)} />}
+      {selectedDate && <DayPanel date={selectedDate} launches={dayLaunches} today={todayStr} onClose={() => setSelectedDate(null)} />}
     </div>
   );
 }

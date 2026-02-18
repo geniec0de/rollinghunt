@@ -165,3 +165,41 @@ export async function updateProfileDisplayName(
   revalidatePath("/my-launches");
   return { success: "Display name updated. It will show as the owner name on your launches." };
 }
+
+export async function updateProfileContact(
+  _prevState: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const supabase = await createServerActionClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be signed in." };
+  }
+
+  const phone = formData.get("phone");
+  const twitterUrl = formData.get("twitterUrl");
+  const linkedinUrl = formData.get("linkedinUrl");
+  const githubUrl = formData.get("githubUrl");
+  const timezone = formData.get("timezone");
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      phone: typeof phone === "string" ? phone.trim() || null : null,
+      twitter_url: typeof twitterUrl === "string" ? twitterUrl.trim() || null : null,
+      linkedin_url: typeof linkedinUrl === "string" ? linkedinUrl.trim() || null : null,
+      github_url: typeof githubUrl === "string" ? githubUrl.trim() || null : null,
+      timezone: typeof timezone === "string" ? timezone.trim() || null : null,
+    })
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/profile");
+  return { success: "Contact and social links updated." };
+}

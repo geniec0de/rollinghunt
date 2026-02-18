@@ -14,7 +14,7 @@ function SubmitButton() {
 
   return (
     <button className="cta mt-2" disabled={pending} type="submit">
-      {pending ? "Saving..." : "Save changes"}
+      {pending ? "Saving…" : "Save changes"}
     </button>
   );
 }
